@@ -1,0 +1,66 @@
+Tool version: Cppcheck 2.19.0
+Command: cppcheck --enable=all --inconclusive --std=c11 --suppress=missingIncludeSystem --template=gcc original/dirty_code.c 2>&1
+Working directory: /mnt/d/Projects/Exp4-Dirty-Code-Refactoring
+Date/time (UTC): 2026-11-17 22:34:15 UTC
+
+--- Complete cppcheck output ---
+Checking original/dirty_code.c ...
+original/dirty_code.c:5:8: warning: Buffer is accessed out of bounds: name [bufferAccessOutOfBounds]
+strcpy(name, "Alexander Mishra");
+       ^
+original/dirty_code.c:7:11: warning: Condition 'marks>50' is always true [knownConditionTrueFalse]
+if (marks > 50) {
+          ^
+original/dirty_code.c:6:13: note: Assignment 'marks=75', assigned value is 75
+int marks = 75;
+            ^
+original/dirty_code.c:7:11: note: Condition 'marks>50' is always true
+if (marks > 50) {
+          ^
+original/dirty_code.c:8:11: warning: Condition 'marks<100' is always true [knownConditionTrueFalse]
+if (marks < 100) {
+          ^
+original/dirty_code.c:6:13: note: Assignment 'marks=75', assigned value is 75
+int marks = 75;
+            ^
+original/dirty_code.c:8:11: note: Condition 'marks<100' is always true
+if (marks < 100) {
+          ^
+original/dirty_code.c:18:9: warning: If resource allocation fails, then there is a possible null pointer dereference: fp [nullPointerOutOfResources]
+fprintf(fp, "%s %d\n", name, marks);
+        ^
+original/dirty_code.c:17:17: note: Assuming allocation function fails
+FILE *fp = fopen("student.txt", "w");
+                ^
+original/dirty_code.c:17:17: note: Assignment 'fp=fopen("student.txt","w")', assigned value is 0
+FILE *fp = fopen("student.txt", "w");
+                ^
+original/dirty_code.c:18:9: note: Null pointer dereference
+fprintf(fp, "%s %d\n", name, marks);
+        ^
+original/dirty_code.c:19:8: warning: If resource allocation fails, then there is a possible null pointer dereference: fp [nullPointerOutOfResources]
+fclose(fp);
+       ^
+original/dirty_code.c:17:17: note: Assuming allocation function fails
+FILE *fp = fopen("student.txt", "w");
+                ^
+original/dirty_code.c:17:17: note: Assignment 'fp=fopen("student.txt","w")', assigned value is 0
+FILE *fp = fopen("student.txt", "w");
+                ^
+original/dirty_code.c:19:8: note: Null pointer dereference
+fclose(fp);
+       ^
+original/dirty_code.c:9:11: warning: The comparison 'marks == 75' is always true. [knownConditionTrueFalse]
+if (marks == 75) {
+          ^
+original/dirty_code.c:6:13: note: 'marks' is assigned value '75' here.
+int marks = 75;
+            ^
+original/dirty_code.c:9:11: note: The comparison 'marks == 75' is always true.
+if (marks == 75) {
+          ^
+nofile:0:0: warning: Active checkers: 119/975 (use --checkers-report=<filename> to see details) [checkersReport]
+
+
+--- Exit status ---
+cppcheck exit status: 0

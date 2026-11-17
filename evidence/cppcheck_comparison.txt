@@ -1,0 +1,55 @@
+CPPCHECK BEFORE-AND-AFTER COMPARISON - LAB 3B / EXPERIMENT 4
+============================================================
+
+Tool: Cppcheck 2.19.0
+Command template (identical for both files):
+  cppcheck --enable=all --inconclusive --std=c11 --suppress=missingIncludeSystem --template=gcc <file> 2>&1
+Exit status: 0 for both runs (--error-exitcode was not used).
+The informational [checkersReport] line is not counted as a finding.
+
+DIAGNOSTIC INVENTORY
+
+Original (evidence/cppcheck_before.txt) - 6 findings, all severity=warning:
+  1. original/dirty_code.c:5:8   warning  bufferAccessOutOfBounds  Buffer is accessed out of bounds: name
+  2. original/dirty_code.c:7:11  warning  knownConditionTrueFalse   Condition 'marks>50' is always true
+  3. original/dirty_code.c:8:11  warning  knownConditionTrueFalse   Condition 'marks<100' is always true
+  4. original/dirty_code.c:18:9  warning  nullPointerOutOfResources possible null pointer dereference: fp (fprintf)
+  5. original/dirty_code.c:19:8  warning  nullPointerOutOfResources possible null pointer dereference: fp (fclose)
+  6. original/dirty_code.c:9:11  warning  knownConditionTrueFalse   The comparison 'marks == 75' is always true
+
+Refactored (evidence/cppcheck_after.txt) - 0 findings:
+  No diagnostics other than the informational active-checkers line.
+
+METRIC TABLE
+
+Metric                    Original   Refactored   Interpretation
+Errors                    0          0            No severity=error diagnostics in either run.
+Warnings                  6          0            All original findings were severity=warning.
+Style findings            0          0            No severity=style diagnostics; three original warnings are logic-like by ID.
+Performance findings      0          0            No severity=performance diagnostics.
+Portability findings      0          0            No severity=portability diagnostics.
+Total findings            6          0            Six original findings cleared.
+
+RESOLUTION CLASSIFICATION
+
+Completely resolved:
+  - bufferAccessOutOfBounds at original line 5.
+  - knownConditionTrueFalse at original lines 7, 8 and 9.
+  - nullPointerOutOfResources at original lines 18 and 19.
+Partially resolved: none.
+Remaining: none (excluding the informational checkersReport line).
+Newly introduced: none.
+
+MANUAL REVIEW NOT AUTO-REPORTED BY CPPCHECK
+
+  - if (0) at original lines 14-16 is unreachable/dead code; removed manually.
+  - fprintf() and fclose() return values at original lines 18-19 are unchecked; checked manually in the refactor.
+  - The unused printf() return at original line 10 is permitted by CERT ERR33-C-EX1 for stdout,
+    but MISRA C:2012 Rule 17.7 requires the value to be used; the refactor checks it explicitly.
+  - Magic numbers at original lines 4, 6, 7, 8 and 9 were replaced by named constants.
+
+LIMITATIONS
+
+  Cppcheck 2.19.0 did not emit a diagnostic for the if (0) block, the unchecked fprintf()/fclose()
+  return values or the hard-coded literals. Its silence is not evidence that those practices are absent;
+  they were confirmed by direct source inspection and mapped to CERT C / MISRA C guidance.

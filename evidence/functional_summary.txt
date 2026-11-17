@@ -1,0 +1,24 @@
+FUNCTIONAL TEST SUMMARY - LAB 3B / EXPERIMENT 4
+================================================
+
+Compiler: gcc (Ubuntu 15.2.0-16ubuntu1) 15.2.0
+
+Compilation
+  Original      gcc -Wall -Wextra -std=c11 -g original/dirty_code.c -o build/original_program
+                stdout: empty | stderr: -Wstringop-overflow 17 bytes into 10-byte region | exit 0
+  Refactored    gcc -Wall -Wextra -std=c11 -g refactored/clean_code.c -o build/refactored_program
+                stdout: empty | stderr: empty | exit 0
+
+Tests
+  T1  original, no args                 stdout empty | stderr stack smashing detected | exit 134 | file written
+  T2  original, extra args ignored      stdout empty | stderr stack smashing detected | exit 134 | file written
+  T3  refactored, no args               stdout Excellent | stderr empty | exit 0 | Alexander Mishra 75
+  T4  refactored, Ada Lovelace 82       stdout empty | stderr empty | exit 0 | Ada Lovelace 82
+  T5  refactored, Boundary Student 50   stdout empty | stderr empty | exit 0 | Boundary Student 50
+  T6  refactored, mark 101              stdout empty | stderr usage | exit 1 | no file
+  T7  refactored, mark abc              stdout empty | stderr usage | exit 1 | no file
+  T8  refactored, over-long name        stdout empty | stderr usage | exit 1 | no file
+  T9  refactored, one argument          stdout empty | stderr usage | exit 1 | no file
+
+The original's buffered stdout was not flushed before abort. Full transcript:
+evidence/functional_tests.txt

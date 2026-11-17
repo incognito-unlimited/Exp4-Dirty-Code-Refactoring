@@ -1,0 +1,12 @@
+Tool version: Cppcheck 2.19.0
+Command: cppcheck --enable=all --inconclusive --std=c11 --suppress=missingIncludeSystem --template=gcc refactored/clean_code.c 2>&1
+Working directory: /mnt/d/Projects/Exp4-Dirty-Code-Refactoring
+Date/time (UTC): 2026-11-17 22:34:15 UTC
+
+--- Complete cppcheck output ---
+Checking refactored/clean_code.c ...
+nofile:0:0: warning: Active checkers: 119/975 (use --checkers-report=<filename> to see details) [checkersReport]
+
+
+--- Exit status ---
+cppcheck exit status: 0

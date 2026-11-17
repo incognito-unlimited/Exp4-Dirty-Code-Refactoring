@@ -1,0 +1,132 @@
+FUNCTIONAL TEST EVIDENCE - LAB 3B / EXPERIMENT 4
+===================================================
+
+Date/time (UTC): 2026-11-17 22:35:19 UTC
+Working directory: /mnt/d/Projects/Exp4-Dirty-Code-Refactoring
+Compiler: gcc (Ubuntu 15.2.0-16ubuntu1) 15.2.0
+Operating system: Ubuntu 26.04.1 LTS
+Kernel: Linux 6.18.58.1-microsoft-standard-WSL2
+
+All stdout, stderr, exit statuses and student.txt contents below are captured from real executions.
+
+COMPILATION 1 - ORIGINAL SOURCE
+Command: gcc -Wall -Wextra -std=c11 -g original/dirty_code.c -o build/original_program
+--- compiler stdout ---
+--- compiler stderr ---
+original/dirty_code.c: In function ‘main’:
+original/dirty_code.c:5:1: warning: ‘__builtin_memcpy’ writing 17 bytes into a region of size 10 overflows the destination [-Wstringop-overflow=]
+    5 | strcpy(name, "Alexander Mishra");
+      | ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+original/dirty_code.c:4:6: note: destination object ‘name’ of size 10
+    4 | char name[10];
+      |      ^~~~
+Compiler exit status: 0
+
+COMPILATION 2 - REFACTORED SOURCE
+Command: gcc -Wall -Wextra -std=c11 -g refactored/clean_code.c -o build/refactored_program
+--- compiler stdout ---
+--- compiler stderr ---
+Compiler exit status: 0
+
+TEST 1 - Original program, no arguments (its only documented mode)
+Command: (cd /mnt/d/Projects/Exp4-Dirty-Code-Refactoring/build/run_original && /mnt/d/Projects/Exp4-Dirty-Code-Refactoring/build/original_program)
+--- stdout ---
+--- stderr ---
+*** stack smashing detected ***: terminated
+Exit status: 134
+--- student.txt (text) ---
+Alexander Mishra 75
+--- student.txt (bytes) ---
+  41  6c  65  78  61  6e  64  65  72  20  4d  69  73  68  72  61
+   A   l   e   x   a   n   d   e   r       M   i   s   h   r   a
+  20  37  35  0a
+       7   5  \n
+
+TEST 2 - Original program, extra arguments are ignored (no input validation present)
+Command: (cd /mnt/d/Projects/Exp4-Dirty-Code-Refactoring/build/run_original_extra && /mnt/d/Projects/Exp4-Dirty-Code-Refactoring/build/original_program Ignored\ Name 1)
+--- stdout ---
+--- stderr ---
+*** stack smashing detected ***: terminated
+Exit status: 134
+--- student.txt (text) ---
+Alexander Mishra 75
+--- student.txt (bytes) ---
+  41  6c  65  78  61  6e  64  65  72  20  4d  69  73  68  72  61
+   A   l   e   x   a   n   d   e   r       M   i   s   h   r   a
+  20  37  35  0a
+       7   5  \n
+
+TEST 3 - Refactored program, no arguments (preserves original default behaviour)
+Command: (cd /mnt/d/Projects/Exp4-Dirty-Code-Refactoring/build/run_refactored_default && /mnt/d/Projects/Exp4-Dirty-Code-Refactoring/build/refactored_program)
+--- stdout ---
+Excellent
+--- stderr ---
+Exit status: 0
+--- student.txt (text) ---
+Alexander Mishra 75
+--- student.txt (bytes) ---
+  41  6c  65  78  61  6e  64  65  72  20  4d  69  73  68  72  61
+   A   l   e   x   a   n   d   e   r       M   i   s   h   r   a
+  20  37  35  0a
+       7   5  \n
+
+TEST 4 - Refactored program, valid custom name and mark
+Command: (cd /mnt/d/Projects/Exp4-Dirty-Code-Refactoring/build/run_refactored_valid && /mnt/d/Projects/Exp4-Dirty-Code-Refactoring/build/refactored_program Ada\ Lovelace 82)
+--- stdout ---
+--- stderr ---
+Exit status: 0
+--- student.txt (text) ---
+Ada Lovelace 82
+--- student.txt (bytes) ---
+  41  64  61  20  4c  6f  76  65  6c  61  63  65  20  38  32  0a
+   A   d   a       L   o   v   e   l   a   c   e       8   2  \n
+
+TEST 5 - Refactored program, valid lower boundary mark
+Command: (cd /mnt/d/Projects/Exp4-Dirty-Code-Refactoring/build/run_refactored_lower && /mnt/d/Projects/Exp4-Dirty-Code-Refactoring/build/refactored_program Boundary\ Student 50)
+--- stdout ---
+--- stderr ---
+Exit status: 0
+--- student.txt (text) ---
+Boundary Student 50
+--- student.txt (bytes) ---
+  42  6f  75  6e  64  61  72  79  20  53  74  75  64  65  6e  74
+   B   o   u   n   d   a   r   y       S   t   u   d   e   n   t
+  20  35  30  0a
+       5   0  \n
+
+TEST 6 - Refactored program, invalid mark above maximum
+Command: (cd /mnt/d/Projects/Exp4-Dirty-Code-Refactoring/build/run_refactored_high && /mnt/d/Projects/Exp4-Dirty-Code-Refactoring/build/refactored_program Invalid\ Mark 101)
+--- stdout ---
+--- stderr ---
+Invalid arguments. Use: /mnt/d/Projects/Exp4-Dirty-Code-Refactoring/build/refactored_program [name mark]
+Exit status: 1
+student.txt: not created
+
+TEST 7 - Refactored program, non-numeric mark
+Command: (cd /mnt/d/Projects/Exp4-Dirty-Code-Refactoring/build/run_refactored_nonnumeric && /mnt/d/Projects/Exp4-Dirty-Code-Refactoring/build/refactored_program Invalid\ Mark abc)
+--- stdout ---
+--- stderr ---
+Invalid arguments. Use: /mnt/d/Projects/Exp4-Dirty-Code-Refactoring/build/refactored_program [name mark]
+Exit status: 1
+student.txt: not created
+
+TEST 8 - Refactored program, over-long name
+Command: (cd /mnt/d/Projects/Exp4-Dirty-Code-Refactoring/build/run_refactored_longname && /mnt/d/Projects/Exp4-Dirty-Code-Refactoring/build/refactored_program NameThatIsDefinitelyFarTooLongForTheSixtyFourByteDestinationBufferxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx 75)
+--- stdout ---
+--- stderr ---
+Invalid arguments. Use: /mnt/d/Projects/Exp4-Dirty-Code-Refactoring/build/refactored_program [name mark]
+Exit status: 1
+student.txt: not created
+
+TEST 9 - Refactored program, wrong argument count
+Command: (cd /mnt/d/Projects/Exp4-Dirty-Code-Refactoring/build/run_refactored_argcount && /mnt/d/Projects/Exp4-Dirty-Code-Refactoring/build/refactored_program OnlyName)
+--- stdout ---
+--- stderr ---
+Invalid arguments. Use: /mnt/d/Projects/Exp4-Dirty-Code-Refactoring/build/refactored_program [name mark]
+Exit status: 1
+student.txt: not created
+
+INTERPRETATION
+The original program has no external input interface; arguments in Test 2 are ignored by it.
+The refactored program keeps the no-argument default behaviour and adds optional name/mark arguments
+solely so valid and invalid inputs can be exercised. Invalid inputs are rejected before any file write.

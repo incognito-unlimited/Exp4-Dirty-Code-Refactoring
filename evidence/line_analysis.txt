@@ -1,0 +1,33 @@
+ORIGINAL LINE-NUMBERED ANALYSIS - LAB 3B / EXPERIMENT 4
+=======================================================
+
+Line  Source                                             Confirmed finding
+----  -------------------------------------------------  --------------------------------
+1     #include <stdio.h>                                  -
+2     #include <string.h>                                  required only by unsafe strcpy()
+3     int main(void) {                                    -
+4     char name[10];                                      F-01 buffer too small; F-02 magic 10
+5     strcpy(name, "Alexander Mishra");                   F-01 17 bytes into 10-byte stack buffer
+6     int marks = 75;                                     F-02 magic 75; source of invariant tests
+7     if (marks > 50) {                                   F-02 magic 50; F-03 invariant; nesting
+8     if (marks < 100) {                                  F-02 magic 100; F-03 invariant; nesting
+9     if (marks == 75) {                                  F-02 magic 75; F-03 invariant; nesting
+10    printf("Excellent\n");                              F-05 unused non-void return (MISRA 17.7)
+11    }                                                   closes line 9 block
+12    }                                                   closes line 8 block
+13    }                                                   closes line 7 block
+14    if (0) {                                            F-04 invariant, unreachable dead branch
+15    printf("Dead code\n");                              F-04 unreachable statement
+16    }                                                   closes dead branch
+17    FILE *fp = fopen("student.txt", "w");               F-02 hard-coded path; F-05 unchecked NULL
+18    fprintf(fp, "%s %d\n", name, marks);                F-05 unchecked write + possible NULL deref
+19    fclose(fp);                                         F-05 unchecked close + possible NULL deref
+20    return 0;                                           replaced by EXIT_SUCCESS in refactor
+21    }                                                   end of main
+
+Confirmed IDs: F-01 STR31-C / MISRA 21.17; F-02 DCL06-C; F-03 MISRA 14.3;
+F-04 MSC12-C / MISRA 2.1, 2.2, 14.3; F-05 ERR33-C / MISRA Dir 4.7, Rule 17.7;
+F-06 structural validation/error-policy boundary.
+
+Not present: gets(), strcat(), sprintf(), poor naming, duplicate code,
+suppressed warnings, external input path.

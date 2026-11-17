@@ -1,0 +1,23 @@
+TOOL VERSIONS - LAB 3B / EXPERIMENT 4
+=====================================
+
+cppcheck --version
+Cppcheck 2.19.0
+
+gcc --version | head -1
+gcc (Ubuntu 15.2.0-16ubuntu1) 15.2.0
+
+python3 --version (used only for DOCX template population)
+Python 3.14.4
+
+Operating system
+Ubuntu 26.04.1 LTS
+
+Kernel
+Linux 6.18.58.1-microsoft-standard-WSL2 x86_64
+
+Original source SHA-256
+dae4262383e3aa96d80eb846015332425f36ad4a8198c7c6adb066a5fd472083
+
+Original source line count
+21
